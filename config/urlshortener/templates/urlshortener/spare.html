@@ -5,7 +5,7 @@
 <div class="container">
   <div class="card mt-5">
     <div class="card-header text-center py-3">
-      <h1>URL Shortner Application <i class="fas fa-link px-2"></i></h1>
+      <h1>URL Shortener Application <i class="fas fa-link px-2"></i></h1>
     </div>
     <div class="px-3 py-4">
       <form action="" method="POST">
@@ -34,6 +34,15 @@
     <p>You can copy the Link below and share it with your friends</p>
     <p class="">{{new_url}}</p>
     <p><span class="text-danger">Previous URL:</span> {{long_url}}</p>
+    <p>Number of times: {{no_of_times}}</p>
+
+    <h1>All Urls</h1>
+    {%for url in all_urls %}
+      <p>Short URL: {{ url.short_url }}</p>
+      <p>Long URL: {{ url.long_url }}</p>
+      <p>Number of times: {{url.no_of_times}}</p>
+      <hr>
+    {% endfor %}
   </div>
   {% endif %}
 </div>
