@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 
 from .models import Shortener
 
-from .forms import ShortenerForm
+from .forms import ShortenerForm, UserCreationForm, LoginForm
+# from .forms import ShortenerForm
 
 # Create your views here.
 
@@ -53,3 +55,32 @@ def view_all_urls(request):
     all_urls = Shortener.objects.all()
     template = 'urlshortener/home.html'
     return render(request,template,{'all_urls':all_urls})
+
+def user_signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+        
+    else:
+        form = UserCreationForm()
+    return render(request,'urlshortener/signup.html',{'form':form})
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request,username=username, password=password)
+            if user:
+                login(request,user)
+                return redirect('home')
+    else:
+        form = LoginForm()
+    return render(request,'urlshortener/login.html',{'form':form})
+    
+def user_logout(request):
+    logout(request)
+    return redirect('login')
